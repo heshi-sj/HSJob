@@ -1,0 +1,186 @@
+Spring MVC 是什么？
+SpringMVC 全名叫 Spring Web MVC，是⼀种基于 Java 的实现 MVC 设计模型的请求驱动类型的轻量级
+Web 框架，属于 SpringFrameWork 的后续产品。
+SpringMVC 已经成为 ⽬前最主流的 MVC 框架 之⼀，并且 随着 Spring3.0 的发布，全⾯超越 Struts2，
+成为最优秀的 MVC 框架。
+servlet、struts实现接⼝、springmvc中要让⼀个java类能够处理请求只需要添加注解就ok
+它通过⼀套注解，让⼀个简单的 Java 类成为处理请求的控制器，⽽⽆须实现任何接⼝。同时它还⽀持
+RESTful 编程⻛格的请求。
+总之：Spring MVC和Struts2⼀样，都是 为了解决表现层问题 的web框架，它们都是基于 MVC 设计模
+式的。⽽这些表现层框架的主要职责就是处理前端HTTP请求。
+Spring MVC 本质可以认为是对servlet的封装，简化了我们serlvet的开发
+作⽤：1）接收请求 2）返回响应，跳转⻚⾯
+
+1111111111111111111111111111111111111111111111
+         第⼀步：⽤户发送请求⾄前端控制器DispatcherServlet
+第⼆步：DispatcherServlet收到请求调⽤HandlerMapping处理器映射器
+第三步：处理器映射器根据请求Url找到具体的Handler（后端控制器），⽣成处理器对象及处理器拦截
+器(如果 有则⽣成)⼀并返回DispatcherServlet
+第四步：DispatcherServlet调⽤HandlerAdapter处理器适配器去调⽤Handler
+第五步：处理器适配器执⾏Handler
+第六步：Handler执⾏完成给处理器适配器返回ModelAndView
+第七步：处理器适配器向前端控制器返回 ModelAndView，ModelAndView 是SpringMVC 框架的⼀个
+底层对 象，包括 Model 和 View
+第⼋步：前端控制器请求视图解析器去进⾏视图解析，根据逻辑视图名来解析真正的视图。
+第九步：视图解析器向前端控制器返回View
+第⼗步：前端控制器进⾏视图渲染，就是将模型数据（在 ModelAndView 对象中）填充到 request 域
+第⼗⼀步：前端控制器向⽤户响应结果
+2222222222222222222222222222222222222222222222222222222222222
+HandlerMapping（处理器映射器）
+HandlerMapping 是⽤来查找 Handler 的，也就是处理器，具体的表现形式可以是类，也可以是
+⽅法。⽐如，标注了@RequestMapping的每个⽅法都可以看成是⼀个Handler。Handler负责具
+体实际的请求处理，在请求到达后，HandlerMapping 的作⽤便是找到请求相应的处理器
+Handler 和 Interceptor.
+HandlerAdapter（处理器适配器）
+HandlerAdapter 是⼀个适配器。因为 Spring MVC 中 Handler 可以是任意形式的，只要能处理请
+求即可。但是把请求交给 Servlet 的时候，由于 Servlet 的⽅法结构都是
+doService(HttpServletRequest req,HttpServletResponse resp)形式的，要让固定的 Servlet 处理
+⽅法调⽤ Handler 来进⾏处理，便是 HandlerAdapter 的职责。
+HandlerExceptionResolver
+HandlerExceptionResolver ⽤于处理 Handler 产⽣的异常情况。它的作⽤是根据异常设置
+ModelAndView，之后交给渲染⽅法进⾏渲染，渲染⽅法会将 ModelAndView 渲染成⻚⾯。
+ViewResolver
+ViewResolver即视图解析器，⽤于将String类型的视图名和Locale解析为View类型的视图，只有⼀
+个resolveViewName()⽅法。从⽅法的定义可以看出，Controller层返回的String类型视图名
+viewName 最终会在这⾥被解析成为View。View是⽤来渲染⻚⾯的，也就是说，它会将程序返回
+的参数和数据填⼊模板中，⽣成html⽂件。ViewResolver 在这个过程主要完成两件事情：
+ViewResolver 找到渲染所⽤的模板（第⼀件⼤事）和所⽤的技术（第⼆件⼤事，其实也就是找到
+视图的类型，如JSP）并填⼊参数。默认情况下，Spring MVC会⾃动为我们配置⼀个
+InternalResourceViewResolver,是针对 JSP 类型视图的。
+RequestToViewNameTranslator
+RequestToViewNameTranslator 组件的作⽤是从请求中获取 ViewName.因为 ViewResolver 根据
+ViewName 查找 View，但有的 Handler 处理完成之后,没有设置 View，也没有设置 ViewName，
+便要通过这个组件从请求中查找 ViewName。
+LocaleResolver
+ViewResolver 组件的 resolveViewName ⽅法需要两个参数，⼀个是视图名，⼀个是 Locale。
+LocaleResolver ⽤于从请求中解析出 Locale，⽐如中国 Locale 是 zh-CN，⽤来表示⼀个区域。这
+个组件也是 i18n 的基础。
+ThemeResolver
+ThemeResolver 组件是⽤来解析主题的。主题是样式、图⽚及它们所形成的显示效果的集合。
+Spring MVC 中⼀套主题对应⼀个 properties⽂件，⾥⾯存放着与当前主题相关的所有资源，如图
+⽚、CSS样式等。创建主题⾮常简单，只需准备好资源，然后新建⼀个“主题名.properties”并将资
+源设置进去，放在classpath下，之后便可以在⻚⾯中使⽤了。SpringMVC中与主题相关的类有
+ThemeResolver、ThemeSource和Theme。ThemeResolver负责从请求中解析出主题名，
+ThemeSource根据主题名找到具体的主题，其抽象也就是Theme，可以通过Theme来获取主题和
+具体的资源。
+MultipartResolver
+MultipartResolver ⽤于上传请求，通过将普通的请求包装成 MultipartHttpServletRequest 来实
+现。MultipartHttpServletRequest 可以通过 getFile() ⽅法 直接获得⽂件。如果上传多个⽂件，还
+可以调⽤ getFileMap()⽅法得到Map<FileName，File>这样的结构，MultipartResolver 的作⽤就
+是封装普通的请求，使其拥有⽂件上传的功能。
+FlashMapManager
+FlashMap ⽤于重定向时的参数传递，⽐如在处理⽤户订单时候，为了避免重复提交，可以处理完
+post请求之后重定向到⼀个get请求，这个get请求可以⽤来显示订单详情之类的信息。这样做虽然
+可以规避⽤户重新提交订单的问题，但是在这个⻚⾯上要显示订单的信息，这些数据从哪⾥来获得
+呢？因为重定向时么有传递参数这⼀功能的，如果不想把参数写进URL（不推荐），那么就可以通
+过FlashMap来传递。只需要在重定向之前将要传递的数据写⼊请求（可以通过
+ServletRequestAttributes.getRequest()⽅法获得）的属性OUTPUT_FLASH_MAP_ATTRIBUTE
+中，这样在重定向之后的Handler中Spring就会⾃动将其设置到Model中，在显示订单信息的⻚⾯
+上就可以直接从Model中获取数据。FlashMapManager 就是⽤来管理 FalshMap 的。
+3333333333333333333333333333333333333333333333333333333333333
+
+
+ Ajax Json交互
+交互：两个⽅向
+1）前端到后台：前端ajax发送json格式字符串，后台直接接收为pojo参数，使⽤注解@RequstBody
+2）后台到前端：后台直接返回pojo对象，前端直接接收为json对象或者字符串，使⽤注解
+@ResponseBody
+5.1 什么是 Json
+Json是⼀种与语⾔⽆关的数据交互格式，就是⼀种字符串，只是⽤特殊符号{}内表示对象、[]内表示数
+组、""内是属性或值、：表示后者是前者的值
+{"name": "Michael"}可以理解为是⼀个包含name为Michael的对象
+[{"name": "Michael"},{"name": "Jerry"}]就表示包含两个对象的数组
+5.2 @ResponseBody注解
+@responseBody注解的作⽤是将controller的⽅法返回的对象通过适当的转换器转换为指定的格式之
+后，写⼊到response对象的body区，通常⽤来返回JSON数据或者是XML数据。 注意：在使⽤此注解之
+后不会再⾛视图处理器，⽽是直接将数据写⼊到输⼊流中，他的效果等同于通过response对象输出指定
+格式的数据。
+
+444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444监听部分
+Servlet：处理Request请求和Response响应
+过滤器（Filter）：对Request请求起到过滤的作⽤，作⽤在Servlet之前，如果配置为/*可以对所
+有的资源访问（servlet、js/css静态资源等）进⾏过滤处理
+监听器（Listener）：实现了javax.servlet.ServletContextListener 接⼝的服务器端组件，它随
+Web应⽤的启动⽽启动，只初始化⼀次，然后会⼀直运⾏监视，随Web应⽤的停⽌⽽销毁
+作⽤⼀：做⼀些初始化⼯作，web应⽤中spring容器启动ContextLoaderListener
+作⽤⼆：监听web中的特定事件，⽐如HttpSession,ServletRequest的创建和销毁；变量的创建、
+销毁和修改等。可以在某些动作前后增加处理，实现监控，⽐如统计在线⼈数，利⽤
+HttpSessionLisener等。
+拦截器（Interceptor）：是SpringMVC、Struts等表现层框架⾃⼰的，不会拦截
+jsp/html/css/image的访问等，只会拦截访问的控制器⽅法（Handler）。
+从配置的⻆度也能够总结发现：serlvet、filter、listener是配置在web.xml中的，⽽interceptor是
+配置在表现层框架⾃⼰的配置⽂件中的
+在Handler业务逻辑执⾏之前拦截⼀次
+在Handler逻辑执⾏完毕但未跳转⻚⾯之前拦截⼀次
+在跳转⻚⾯之后拦截⼀次
+
+
+55555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555
+SpringMVC九⼤组件初始化
+1）在DispatcherServlet中定义了九个属性，每⼀个属性都对应⼀种组件
+/** MultipartResolver used by this servlet. */
+// 多部件解析器
+@Nullable
+private MultipartResolver multipartResolver;
+/** LocaleResolver used by this servlet. */
+// 区域化 国际化解析器
+@Nullable
+private LocaleResolver localeResolver;
+/** ThemeResolver used by this servlet. */
+// 主题解析器
+@Nullable
+private ThemeResolver themeResolver;
+/** List of HandlerMappings used by this servlet. */
+// 处理器映射器组件
+@Nullable
+private List<HandlerMapping> handlerMappings;
+/** List of HandlerAdapters used by this servlet. */
+// 处理器适配器组件
+@Nullable
+九⼤组件都是定义了接⼝，接⼝其实就是定义了该组件的规范，⽐如ViewResolver、HandlerAdapter
+等都是接⼝
+66666666666666666666666666666666666666666666666666666666666666666666666666666666666666乱码
+
+Post请求乱码，web.xml中加⼊过滤器
+</context-param>
+<!--spring框架启动-->
+<listener>
+<listener-
+class>org.springframework.web.context.ContextLoaderListener</listener-
+class>
+</listener>
+<!--springmvc启动-->
+<servlet>
+<servlet-name>springmvc</servlet-name>
+<servlet-
+class>org.springframework.web.servlet.DispatcherServlet</servlet-
+class>
+<init-param>
+<param-name>contextConfigLocation</param-name>
+<param-value>classpath*:springmvc.xml</param-value>
+</init-param>
+<load-on-startup>1</load-on-startup>
+</servlet>
+<servlet-mapping>
+<servlet-name>springmvc</servlet-name>
+<url-pattern>/</url-pattern>
+</servlet-mapping>
+</web-app>
+<!-- 解决post乱码问题 -->
+<filter>
+<filter-name>encoding</filter-name>
+<filter-class>
+org.springframework.web.filter.CharacterEncodingFilter
+</filter-class>
+<!-- 设置编码参是UTF8 -->
+<init-param>
+<param-name>encoding</param-name>
+<param-value>UTF-8</param-value>
+</init-param>
+<init-param>
+
+
+
+
+
+
