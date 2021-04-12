@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<server>
+    <service>
+        <Connector port="8080"/>
+        <Engine>
+            <Host name="localhost" appBase="E:\homework\one_homework\webapps"></Host>
+        </Engine>
+    </service>
+</server>
