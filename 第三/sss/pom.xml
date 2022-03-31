@@ -349,7 +349,7 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-beans</artifactId>
-      <version>5.1.12.RELEASE</version>
+      <version>5.3.18</version>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
@@ -479,7 +479,7 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-beans</artifactId>
-      <version>5.1.12.RELEASE</version>
+      <version>5.3.18</version>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
@@ -554,7 +554,7 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-beans</artifactId>
-      <version>5.1.12.RELEASE</version>
+      <version>5.3.18</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -590,7 +590,7 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-beans</artifactId>
-      <version>5.1.12.RELEASE</version>
+      <version>5.3.18</version>
       <scope>test</scope>
     </dependency>
     <dependency>
